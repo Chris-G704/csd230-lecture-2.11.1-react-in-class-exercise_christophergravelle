@@ -1,7 +1,9 @@
 package csd230.controllers;
 
 import csd230.entities.BookEntity;
+import csd230.entities.MagazineEntity;
 import csd230.repositories.BookRepository;
+import csd230.repositories.MagazineRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,5 +60,62 @@ public class MagazineController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @RestController
+    @RequestMapping("/api/magazines")
+    @CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
+    public static class magazineController {
+
+        private final MagazineRepository magazineRepository;
+
+        public magazineController(MagazineRepository magazineRepository) {
+            this.magazineRepository = magazineRepository;
+        }
+
+        // GET all magazines
+        @GetMapping
+        public List<MagazineEntity> getAllMagazines() {
+            return magazineRepository.findAll();
+        }
+
+        // GET single magazine
+        @GetMapping("/{id}")
+        public ResponseEntity<MagazineEntity> getMagazineById(@PathVariable Long id) {
+            return magazineRepository.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        }
+
+        // POST create magazine
+        @PostMapping
+        public MagazineEntity createMagazine(@RequestBody MagazineEntity magazine) {
+            return magazineRepository.save(magazine);
+        }
+
+        // PUT update magazine
+        @PutMapping("/{id}")
+        public ResponseEntity<MagazineEntity> updateMagazine(
+                @PathVariable Long id,
+                @RequestBody MagazineEntity magazineDetails) {
+            return magazineRepository.findById(id).map(magazine -> {
+                magazine.setTitle(magazineDetails.getTitle());
+                magazine.setPrice(magazineDetails.getPrice());
+                magazine.setCopies(magazineDetails.getCopies());
+                magazine.setOrderQty(magazineDetails.getOrderQty());
+                magazine.setCurrentIssue(magazineDetails.getCurrentIssue());
+                return ResponseEntity.ok(magazineRepository.save(magazine));
+            }).orElse(ResponseEntity.notFound().build());
+        }
+
+        // DELETE magazine
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteMagazine(@PathVariable Long id) {
+            if (magazineRepository.existsById(id)) {
+                magazineRepository.deleteById(id);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.notFound().build();
+        }
     }
 }
