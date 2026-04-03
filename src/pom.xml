@@ -1,0 +1,79 @@
+<properties>
+   <maven.compiler.source>23</maven.compiler.source>
+   <maven.compiler.target>23</maven.compiler.target>
+   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   <!-- Added property for JUnit version -->
+   <junit.version>5.10.2</junit.version>
+</properties>
+
+
+<!-- =================================================================== -->
+<!--  1. JUNIT BILL OF MATERIALS (BOM) FOR VERSION MANAGEMENT            -->
+<!--  This section ensures all JUnit 5 modules have the same version.    -->
+<!-- =================================================================== -->
+<dependencyManagement>
+   <dependencies>
+       <dependency>
+           <groupId>org.junit</groupId>
+           <artifactId>junit-bom</artifactId>
+           <version>${junit.version}</version>
+           <type>pom</type>
+           <scope>import</scope>
+       </dependency>
+   </dependencies>
+</dependencyManagement>
+
+
+
+
+<dependencies>
+   <dependency>
+       <groupId>org.junit.jupiter</groupId>
+       <artifactId>junit-jupiter</artifactId>
+       <version>RELEASE</version>
+       <scope>test</scope>
+   </dependency>
+   <dependency>
+       <groupId>org.netbeans.external</groupId>
+       <artifactId>AbsoluteLayout</artifactId>
+       <version>RELEASE190</version>
+   </dependency>
+   <dependency>
+       <groupId>com.github.javafaker</groupId>
+       <artifactId>javafaker</artifactId>
+       <version>1.0.2</version>
+   </dependency>
+
+
+   <!-- =================================================================== -->
+   <!--  2. JUNIT 5 DEPENDENCIES FOR WRITING & RUNNING TESTS                -->
+   <!-- =================================================================== -->
+   <dependency>
+       <groupId>org.junit.jupiter</groupId>
+       <artifactId>junit-jupiter-api</artifactId>
+       <!-- Version is managed by the BOM -->
+       <scope>test</scope>
+   </dependency>
+   <dependency>
+       <groupId>org.junit.jupiter</groupId>
+       <artifactId>junit-jupiter-engine</artifactId>
+       <!-- Version is managed by the BOM -->
+       <scope>test</scope>
+   </dependency>
+
+
+
+
+</dependencies>
+<!-- =================================================================== -->
+<!--  3. MAVEN SUREFIRE PLUGIN TO EXECUTE THE TESTS                      -->
+<!-- =================================================================== -->
+<build>
+   <plugins>
+       <plugin>
+           <groupId>org.apache.maven.plugins</groupId>
+           <artifactId>maven-surefire-plugin</artifactId>
+           <version>3.2.5</version>
+       </plugin>
+   </plugins>
+</build>
